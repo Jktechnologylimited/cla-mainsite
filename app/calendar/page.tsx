@@ -4,8 +4,21 @@ import { ADMIN_URL } from "@/lib/constants";
 import { Calendar, Tag } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "School Calendar | Cecilia Learning Academy",
-  description: "View the Cecilia Learning Academy academic calendar — term dates, events, holidays and school activities.",
+  title: "Academic Calendar — Cecilia Learning Academy",
+  description: "View the Cecilia Learning Academy academic calendar — term dates, school events, examinations, holidays and important dates for the school year.",
+  alternates: { canonical: "https://cecilialearningacademy.com.ng/calendar" },
+  openGraph: {
+    title: "Academic Calendar | Cecilia Learning Academy",
+    description: "Term dates, school events, examinations and important dates at Cecilia Learning Academy, Port Harcourt.",
+    url: "https://cecilialearningacademy.com.ng/calendar",
+    images: [{ url: "https://res.cloudinary.com/devdspz1m/image/upload/w_1200,h_630,c_fill,g_auto,q_auto,f_auto/v1781695454/PHOTO-2026-05-11-20-32-09_eadl9e.jpg", width: 1200, height: 630, alt: "Cecilia Learning Academy" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Academic Calendar | Cecilia Learning Academy",
+    description: "Term dates, school events, examinations and important dates at Cecilia Learning Academy, Port Harcourt.",
+    images: ["https://res.cloudinary.com/devdspz1m/image/upload/w_1200,h_630,c_fill,g_auto,q_auto,f_auto/v1781695454/PHOTO-2026-05-11-20-32-09_eadl9e.jpg"],
+  },
 };
 
 async function getEvents() {

@@ -5,8 +5,21 @@ import GalleryClient from "./client";
 import { ImageIcon } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Gallery | Cecilia Learning Academy",
-  description: "Browse photos from Cecilia Learning Academy — classrooms, events, sports and life at CLA Port Harcourt.",
+  title: "Gallery — Life at Cecilia Learning Academy",
+  description: "Browse photos and highlights from Cecilia Learning Academy — classrooms, events, sports, arts, and everyday life at CLA Port Harcourt.",
+  alternates: { canonical: "https://cecilialearningacademy.com.ng/gallery" },
+  openGraph: {
+    title: "Gallery | Cecilia Learning Academy Port Harcourt",
+    description: "Photos from classrooms, events, sports, arts and everyday life at Cecilia Learning Academy, Port Harcourt.",
+    url: "https://cecilialearningacademy.com.ng/gallery",
+    images: [{ url: "https://res.cloudinary.com/devdspz1m/image/upload/w_1200,h_630,c_fill,g_auto,q_auto,f_auto/v1781695454/PHOTO-2026-05-11-20-32-10_3_mgpcr2.jpg", width: 1200, height: 630, alt: "Cecilia Learning Academy" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gallery | Cecilia Learning Academy Port Harcourt",
+    description: "Photos from classrooms, events, sports, arts and everyday life at Cecilia Learning Academy, Port Harcourt.",
+    images: ["https://res.cloudinary.com/devdspz1m/image/upload/w_1200,h_630,c_fill,g_auto,q_auto,f_auto/v1781695454/PHOTO-2026-05-11-20-32-10_3_mgpcr2.jpg"],
+  },
 };
 
 async function getGallery() {

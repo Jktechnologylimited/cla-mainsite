@@ -1,20 +1,36 @@
 import { Metadata } from "next";
 import HeroSection from "@/components/sections/HeroSection";
-import { Section, Container, SectionHeader, PageHero } from "@/components/ui";
+import { Section, Container, SectionHeader } from "@/components/ui";
 import { DIVISIONS, SCHOOL, ADMIN_URL } from "@/lib/constants";
 import Link from "next/link";
 import { GraduationCap, Star, Shield, Users, BookOpen, Heart, ArrowRight, Phone, Mail, MapPin, CheckCircle } from "lucide-react";
 
+const BASE_URL = "https://cecilialearningacademy.com.ng";
+const OG_IMAGE = "https://res.cloudinary.com/devdspz1m/image/upload/w_1200,h_630,c_fill,g_auto,q_auto,f_auto/v1781695454/PHOTO-2026-05-11-20-32-09_eadl9e.jpg";
+
 export const metadata: Metadata = {
-  title: "Cecilia Learning Academy | Quality Education in Port Harcourt",
-  description: "Cecilia Learning Academy offers world-class education from Crèche to Senior Secondary in Rumuolumeni, Port Harcourt. Apply today.",
+  title: "Cecilia Learning Academy | Quality Education in Port Harcourt, Rivers State",
+  description:
+    "Cecilia Learning Academy (CLA) offers quality education from Crèche to Senior Secondary in Rumuolumeni, Port Harcourt, Rivers State. Apply for admission today.",
+  alternates: { canonical: BASE_URL },
+  openGraph: {
+    title: "Cecilia Learning Academy | Quality Education in Port Harcourt",
+    description: "World-class education from Crèche to Senior Secondary in Rumuolumeni, Port Harcourt. Learning for Development.",
+    url: BASE_URL,
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Cecilia Learning Academy students" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cecilia Learning Academy | Quality Education in Port Harcourt",
+    description: "World-class education from Crèche to Senior Secondary in Rumuolumeni, Port Harcourt.",
+    images: [OG_IMAGE],
+  },
 };
 
 async function getSettings() {
   try {
     const r = await fetch(`${ADMIN_URL}/api/public/settings`, { next: { revalidate: 300 } });
-    const d = await r.json();
-    return d.settings || {};
+    return (await r.json()).settings || {};
   } catch { return {}; }
 }
 
@@ -136,12 +152,12 @@ export default async function HomePage() {
             subtitle="We go beyond academics to cultivate well-rounded individuals ready for the challenges of tomorrow." />
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { icon: GraduationCap, t: "Academic Excellence",  d: "Rigorous curriculum aligned with Nigerian standards, with a proven track record of outstanding results." },
-              { icon: Heart,         t: "Holistic Development", d: "Sports, arts, clubs and character-building activities that complement the academic programme." },
-              { icon: Shield,        t: "Safe Environment",     d: "A secure, disciplined campus where every child feels valued, respected, and protected." },
-              { icon: Users,         t: "Experienced Educators",d: "Qualified, passionate teachers committed to unlocking the potential in every student." },
-              { icon: Star,          t: "Strong Values",        d: "We instil integrity, discipline, respect, and faith — values that guide students throughout life." },
-              { icon: BookOpen,      t: "Modern Learning",      d: "Contemporary teaching methods that prepare students for the demands of a digital, global world." },
+              { icon: GraduationCap, t: "Academic Excellence",   d: "Rigorous curriculum aligned with Nigerian standards, with a proven track record of outstanding results." },
+              { icon: Heart,         t: "Holistic Development",  d: "Sports, arts, clubs and character-building activities that complement the academic programme." },
+              { icon: Shield,        t: "Safe Environment",      d: "A secure, disciplined campus where every child feels valued, respected, and protected." },
+              { icon: Users,         t: "Experienced Educators", d: "Qualified, passionate teachers committed to unlocking the potential in every student." },
+              { icon: Star,          t: "Strong Values",         d: "We instil integrity, discipline, respect, and faith — values that guide students throughout life." },
+              { icon: BookOpen,      t: "Modern Learning",       d: "Contemporary teaching methods that prepare students for the demands of a digital, global world." },
             ].map(({ icon: Icon, t, d }) => (
               <div key={t} className="group p-6 border border-white/10 hover:border-crimson/50 transition-colors">
                 <div className="w-11 h-11 bg-crimson/20 flex items-center justify-center mb-4 group-hover:bg-crimson transition-colors">

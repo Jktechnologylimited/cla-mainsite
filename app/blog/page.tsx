@@ -3,7 +3,23 @@ import { Section, Container, PageHero, SectionHeader } from "@/components/ui";
 import { ADMIN_URL } from "@/lib/constants";
 import Link from "next/link";
 import { BookOpen, ArrowRight } from "lucide-react";
-export const metadata: Metadata = { title: "News & Blog", description: "Read the latest news, stories, and updates from Cecilia Learning Academy, Port Harcourt." };
+export const metadata: Metadata = {
+  title: "News & Blog — Cecilia Learning Academy",
+  description: "Read the latest news, stories, announcements and insights from the Cecilia Learning Academy community in Port Harcourt, Rivers State.",
+  alternates: { canonical: "https://cecilialearningacademy.com.ng/blog" },
+  openGraph: {
+    title: "News & Blog | Cecilia Learning Academy",
+    description: "Latest news, stories and updates from Cecilia Learning Academy, Port Harcourt.",
+    url: "https://cecilialearningacademy.com.ng/blog",
+    images: [{ url: "https://res.cloudinary.com/devdspz1m/image/upload/w_1200,h_630,c_fill,g_auto,q_auto,f_auto/v1781695454/PHOTO-2026-05-11-20-58-16_qnvkye.jpg", width: 1200, height: 630, alt: "Cecilia Learning Academy" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "News & Blog | Cecilia Learning Academy",
+    description: "Latest news, stories and updates from Cecilia Learning Academy, Port Harcourt.",
+    images: ["https://res.cloudinary.com/devdspz1m/image/upload/w_1200,h_630,c_fill,g_auto,q_auto,f_auto/v1781695454/PHOTO-2026-05-11-20-58-16_qnvkye.jpg"],
+  },
+};
 
 async function getPosts() {
   try { const r = await fetch(`${ADMIN_URL}/api/public/posts`, { next: { revalidate: 60 } }); return (await r.json()).posts || []; }
