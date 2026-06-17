@@ -1,106 +1,150 @@
+import { Metadata } from "next";
+import { Section, Container, PageHero } from "@/components/ui";
+import { ADMIN_URL, SCHOOL } from "@/lib/constants";
 import Link from "next/link";
+import { Target, Eye, Star, ArrowRight } from "lucide-react";
 
-const team = [
-  { name: "Dr. Amara Okonkwo", role: "Founder & Principal", years: "20 years" },
-  { name: "Mrs. Chidinma Eze", role: "Head of Primary", years: "14 years" },
-  { name: "Mr. Emeka Adeyemi", role: "Head of Secondary", years: "12 years" },
-  { name: "Ms. Fatima Bello", role: "Director of Admissions", years: "8 years" },
-];
+export const metadata: Metadata = {
+  title: "About Us | Cecilia Learning Academy",
+  description: "Learn about Cecilia Learning Academy — our mission, vision, values and story of quality education in Port Harcourt.",
+};
 
-const milestones = [
-  { year: "2005", event: "Founded with 60 students and a vision to transform Nigerian education." },
-  { year: "2009", event: "Opened Secondary School; first WAEC cohort achieves 100% distinction rate." },
-  { year: "2013", event: "Awarded Best Private School in Lagos by the National Education Council." },
-  { year: "2017", event: "Launched IGCSE and A-Level programmes; first international placements." },
-  { year: "2021", event: "Completed the new state-of-the-art Sports & Arts Complex." },
-  { year: "2024", event: "Ranked #1 Private School in South-West Nigeria for 3 consecutive years." },
-];
+async function getSettings() {
+  try {
+    const r = await fetch(`${ADMIN_URL}/api/public/settings`, { next: { revalidate: 300 } });
+    return (await r.json()).settings || {};
+  } catch { return {}; }
+}
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const s = await getSettings();
+
+  const mission = s.about_mission || "To provide excellent, holistic, and affordable education that nurtures the intellectual, moral, and social development of every child in our community.";
+  const vision  = s.about_vision  || "To be the foremost centre of academic excellence in Rivers State, raising responsible, innovative, and God-fearing citizens who positively impact their world.";
+  const rawValues = s.about_values || "Academic Excellence\nMoral Integrity\nRespect for All\nInclusion & Diversity\nInnovation & Creativity\nService & Leadership";
+  const values = rawValues.split("\n").map((v: string) => v.trim()).filter(Boolean);
+
+  const storyP1 = s.about_story_p1 || "Cecilia Learning Academy was founded with a singular purpose: to give every child in Rumuolumeni access to world-class education. Starting from humble beginnings, the school has grown into one of Port Harcourt's most trusted institutions.";
+  const storyP2 = s.about_story_p2 || "Over the years, CLA has expanded from a small nursery to a full through-school offering Crèche, Nursery, Primary, and Secondary education. Each stage is carefully designed to build on the last, ensuring continuity, depth, and joy in learning.";
+  const storyP3 = s.about_story_p3 || "Today, CLA is home to hundreds of students and a dedicated team of qualified educators who share a common belief: that every child is uniquely gifted and deserves the very best start in life.";
+
   return (
-    <main className="pt-28">
-      {/* Hero */}
-      <div className="relative bg-forest py-24 overflow-hidden">
-        <div className="absolute inset-0 opacity-5">
-          <svg width="100%" height="100%"><defs><pattern id="ab" width="50" height="50" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="20" fill="none" stroke="#C9A84C" strokeWidth="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#ab)"/></svg>
-        </div>
-        <div className="relative max-w-4xl mx-auto px-6 text-center">
-          <span className="gold-line" />
-          <span className="text-[10px] tracking-[0.3em] uppercase text-gold font-medium block mb-6">About Us</span>
-          <h1 className="font-display text-6xl md:text-7xl text-ivory font-light leading-tight mb-6">
-            Our <span className="italic text-gold">Story</span>
-          </h1>
-          <p className="text-ivory/50 text-lg leading-relaxed max-w-2xl mx-auto">
-            Founded with an uncompromising belief that Nigerian children deserve world-class education on African soil.
-          </p>
-        </div>
-      </div>
+    <>
+      <PageHero
+        title="About Cecilia Learning Academy"
+        subtitle="A legacy of excellence, a heart for every child. Discover the story, values, and people behind CLA."
+        breadcrumb={[{ label: "About", href: "/about" }]}
+      />
 
-      {/* Mission */}
-      <section className="py-24 max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            { label: "Our Mission", text: "To cultivate exceptional minds through an education that is academically rigorous, culturally grounded, and globally relevant — preparing every graduate to lead with excellence and integrity." },
-            { label: "Our Vision", text: "To be Africa&apos;s most respected educational institution — a place where potential is not merely developed but transformed into lasting brilliance." },
-            { label: "Our Values", text: "Excellence without arrogance. Discipline with joy. Curiosity above compliance. Integrity in all things. These are the values that guide every decision at Cecilia Learning Academy." },
-          ].map((item) => (
-            <div key={item.label} className="border border-gold/20 p-10">
-              <span className="gold-line-left" />
-              <h3 className="font-display text-3xl text-forest font-light mb-4">{item.label}</h3>
-              <p className="text-stone text-sm leading-relaxed">{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Milestones */}
-      <section className="py-20 bg-ivory">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="gold-line" />
-            <h2 className="font-display text-5xl text-charcoal font-light mt-4">Two Decades of <span className="italic text-forest">Milestones</span></h2>
-          </div>
-          <div className="relative">
-            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gold/20 -translate-x-1/2 hidden md:block" />
-            {milestones.map((m, i) => (
-              <div key={m.year} className={`flex gap-8 mb-12 items-start ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
-                <div className={`flex-1 ${i % 2 === 0 ? "md:text-right" : ""}`}>
-                  <span className="font-display text-gold text-5xl font-light">{m.year}</span>
-                  <p className="text-stone text-sm leading-relaxed mt-2">{m.event}</p>
+      {/* Mission / Vision / Values */}
+      <Section className="bg-white">
+        <Container>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { icon: Target, label: "Our Mission", text: mission, color: "text-crimson", bg: "bg-crimson/10" },
+              { icon: Eye,    label: "Our Vision",  text: vision,  color: "text-navy",   bg: "bg-navy/10" },
+            ].map(({ icon: Icon, label, text, color, bg }) => (
+              <div key={label} className="p-8 border border-ivory-dark">
+                <div className={`w-12 h-12 ${bg} flex items-center justify-center mb-5`}>
+                  <Icon size={22} className={color} />
                 </div>
-                <div className="hidden md:flex w-4 h-4 rounded-full border-2 border-gold bg-cream mt-2 shrink-0 z-10" />
-                <div className="flex-1" />
+                <div className="h-0.5 w-8 bg-crimson mb-4" />
+                <h2 className="font-display text-xl font-bold text-navy-dark mb-4">{label}</h2>
+                <p className="text-slate text-sm leading-relaxed">{text}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Leadership */}
-      <section className="py-24 max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <span className="gold-line" />
-          <h2 className="font-display text-5xl text-charcoal font-light mt-4">Our <span className="italic text-forest">Leadership</span></h2>
-        </div>
-        <div className="grid md:grid-cols-4 gap-6">
-          {team.map((person) => (
-            <div key={person.name} className="group text-center">
-              <div className="w-24 h-24 mx-auto bg-gradient-to-br from-forest to-forest-mid border border-gold/20 flex items-center justify-center mb-6 group-hover:border-gold transition-colors duration-300">
-                <span className="font-display text-gold text-3xl font-light">{person.name[0]}</span>
+            {/* Values */}
+            <div className="p-8 border border-ivory-dark">
+              <div className="w-12 h-12 bg-yellow-50 flex items-center justify-center mb-5">
+                <Star size={22} className="text-yellow-500" />
               </div>
-              <h4 className="font-display text-xl text-charcoal font-medium mb-1">{person.name}</h4>
-              <div className="text-gold text-[10px] tracking-[0.2em] uppercase mb-1">{person.role}</div>
-              <div className="text-stone text-xs">{person.years} experience</div>
+              <div className="h-0.5 w-8 bg-crimson mb-4" />
+              <h2 className="font-display text-xl font-bold text-navy-dark mb-4">Core Values</h2>
+              <ul className="space-y-2">
+                {values.map((v: string, i: number) => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-slate">
+                    <span className="w-1.5 h-1.5 bg-crimson rounded-full shrink-0 mt-1.5" />
+                    {v}
+                  </li>
+                ))}
+              </ul>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Our Story */}
+      <Section className="bg-ivory">
+        <Container>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-0.5 w-8 bg-crimson" />
+                <span className="text-crimson text-[11px] font-bold uppercase tracking-[0.22em]">Our Story</span>
+              </div>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-navy-dark mb-6 leading-tight">
+                {s.about_story_title || "Rooted in Purpose, Growing with Every Child"}
+              </h2>
+              <div className="space-y-5 text-slate leading-relaxed text-[15px]">
+                <p>{storyP1}</p>
+                <p>{storyP2}</p>
+                <p>{storyP3}</p>
+              </div>
+              <div className="mt-8 flex gap-3 flex-wrap">
+                <Link href="/admissions" className="inline-flex items-center gap-2 bg-crimson text-white font-bold text-sm px-6 py-3 uppercase tracking-wider hover:bg-crimson-dark transition-colors">
+                  Apply for Admission <ArrowRight size={14} />
+                </Link>
+                <Link href="/contact" className="inline-flex items-center gap-2 border-2 border-navy text-navy font-bold text-sm px-6 py-3 uppercase tracking-wider hover:bg-navy hover:text-white transition-colors">
+                  Contact Us
+                </Link>
+              </div>
+            </div>
+            <div className="relative overflow-hidden">
+              <img
+                src="https://res.cloudinary.com/devdspz1m/image/upload/w_900,h_700,c_fill,g_auto,q_auto,f_auto/v1781695454/PHOTO-2026-05-11-20-32-10_p2coxi.jpg"
+                alt="CLA students in a creative learning activity"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-navy-dark/70" />
+              <div className="absolute inset-0 p-10 flex flex-col justify-between">
+                <div>
+                  <p className="font-display text-white text-xl italic font-light leading-relaxed mb-3">
+                    &ldquo;{SCHOOL.tagline}&rdquo;
+                  </p>
+                  <div className="h-0.5 w-12 bg-crimson mb-5" />
+                </div>
+                <div className="grid grid-cols-2 gap-px bg-white/10">
+                  {[
+                    { v: s.home_stats_1_value || "18+", l: s.home_stats_1_label || "Years of Service" },
+                    { v: s.home_stats_2_value || "500+", l: s.home_stats_2_label || "Students Enrolled" },
+                    { v: s.home_stats_3_value || "50+", l: s.home_stats_3_label || "Qualified Staff" },
+                    { v: s.home_stats_4_value || "4", l: s.home_stats_4_label || "School Divisions" },
+                  ].map(({ v, l }) => (
+                    <div key={l} className="bg-navy-dark/60 p-5">
+                      <div className="font-display text-3xl font-bold text-white mb-1">{v}</div>
+                      <div className="text-white/50 text-xs uppercase tracking-wider">{l}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section className="bg-forest py-20 text-center px-6">
-        <h2 className="font-display text-4xl text-ivory font-light mb-6">Ready to Join the <span className="italic text-gold">Cecilia Family?</span></h2>
-        <Link href="/contact" className="btn-gold"><span>Begin Your Application</span></Link>
-      </section>
-    </main>
+      <div className="bg-crimson py-16 text-center px-6">
+        <h2 className="font-display text-3xl font-bold text-white mb-3">
+          {s.home_cta_title || "Ready to Join the CLA Family?"}
+        </h2>
+        <p className="text-white/75 mb-7 max-w-md mx-auto text-[15px]">
+          {s.home_cta_subtitle || "Enrolment is open. Secure your child's place today."}
+        </p>
+        <Link href="/admissions" className="inline-flex items-center gap-2 bg-white text-crimson font-bold px-8 py-4 text-sm uppercase tracking-wider hover:bg-ivory transition-colors">
+          Apply Now <ArrowRight size={14} />
+        </Link>
+      </div>
+    </>
   );
 }

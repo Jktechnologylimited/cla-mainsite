@@ -1,159 +1,226 @@
-import HeroCarousel from "./components/HeroCarousel";
+import { Metadata } from "next";
+import HeroSection from "@/components/sections/HeroSection";
+import { Section, Container, SectionHeader, PageHero } from "@/components/ui";
+import { DIVISIONS, SCHOOL, ADMIN_URL } from "@/lib/constants";
 import Link from "next/link";
-import { Star, Globe, Users, Award, BookOpen } from "lucide-react";
+import { GraduationCap, Star, Shield, Users, BookOpen, Heart, ArrowRight, Phone, Mail, MapPin, CheckCircle } from "lucide-react";
 
-const schools = [
-  { name: "Crèche", age: "3 months – 2 years", desc: "Warm, nurturing care designed to develop trust, sensory exploration, and the earliest cognitive foundations in a safe, loving environment.", icon: "🌱", color: "from-navy/5 to-navy/10", border: "border-navy/15", accent: "text-navy" },
-  { name: "Nursery", age: "2 – 5 years", desc: "Play-based learning rich in language, numeracy, music, and movement — building curiosity, confidence, and a lifelong love of discovery.", icon: "🌼", color: "from-crimson/5 to-crimson/10", border: "border-crimson/15", accent: "text-crimson" },
-  { name: "Primary", age: "5 – 11 years", desc: "A rigorous yet joyful curriculum grounded in critical thinking, creativity, and the British/Nigerian hybrid framework for academic mastery.", icon: "📚", color: "from-navy/5 to-navy/10", border: "border-navy/15", accent: "text-navy" },
-  { name: "Secondary", age: "11 – 18 years", desc: "University-preparatory education with IGCSE and A-Level pathways, leadership programmes, and global exchange opportunities.", icon: "🎓", color: "from-crimson/5 to-crimson/10", border: "border-crimson/15", accent: "text-crimson" },
-];
+export const metadata: Metadata = {
+  title: "Cecilia Learning Academy | Quality Education in Port Harcourt",
+  description: "Cecilia Learning Academy offers world-class education from Crèche to Senior Secondary in Rumuolumeni, Port Harcourt. Apply today.",
+};
 
-const stats = [
-  { value: "98%", label: "University Acceptance Rate" },
-  { value: "20+", label: "Years of Excellence" },
-  { value: "850+", label: "Students Enrolled" },
-  { value: "42", label: "Expert Educators" },
-];
+async function getSettings() {
+  try {
+    const r = await fetch(`${ADMIN_URL}/api/public/settings`, { next: { revalidate: 300 } });
+    const d = await r.json();
+    return d.settings || {};
+  } catch { return {}; }
+}
 
-const values = [
-  { icon: Star, title: "Academic Rigour", desc: "Standards that challenge, inspire, and elevate every student beyond what they believed possible." },
-  { icon: Globe, title: "Global Perspective", desc: "A curriculum and culture that prepares students for leadership in an interconnected world." },
-  { icon: Users, title: "Character Formation", desc: "Values, ethics, and emotional intelligence woven into everything we teach." },
-  { icon: Award, title: "Proven Excellence", desc: "Decades of consistent results in national and international examinations and competitions." },
-];
+export default async function HomePage() {
+  const settings = await getSettings();
 
-export default function HomePage() {
   return (
-    <main>
-      <HeroCarousel />
+    <>
+      <HeroSection />
 
-      {/* Stats ribbon — navy bg */}
-      <div className="bg-navy py-14 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.06]">
-          <svg width="100%" height="100%"><defs><pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="1.5" fill="#FFFFFF" /></pattern></defs><rect width="100%" height="100%" fill="url(#dots)" /></svg>
-        </div>
-        {/* Red top border */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-crimson" />
-        <div className="max-w-7xl mx-auto px-6 relative">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10">
-            {stats.map((s) => (
-              <div key={s.value} className="text-center px-4">
-                <div className="font-display text-crimson text-5xl font-light mb-2">{s.value}</div>
-                <div className="text-white/50 text-[10px] tracking-[0.2em] uppercase">{s.label}</div>
+      {/* Quick contact strip */}
+      <div className="bg-crimson text-white">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/20">
+          {[
+            { icon: Phone, label: "Call Us", value: SCHOOL.phone, href: `tel:${SCHOOL.phone}` },
+            { icon: Mail, label: "Email Us", value: SCHOOL.email, href: `mailto:${SCHOOL.email}` },
+            { icon: MapPin, label: "Find Us", value: "Rumuolumeni, Port Harcourt", href: SCHOOL.googleMapsUrl },
+          ].map(({ icon: Icon, label, value, href }) => (
+            <a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer"
+              className="flex items-center gap-3 py-3.5 px-6 hover:bg-white/10 transition-colors">
+              <Icon size={17} className="shrink-0 opacity-80" />
+              <div>
+                <div className="text-white/55 text-[10px] uppercase tracking-wider">{label}</div>
+                <div className="text-sm font-medium truncate">{value}</div>
               </div>
-            ))}
-          </div>
+            </a>
+          ))}
         </div>
       </div>
 
-      {/* Welcome section */}
-      <section className="py-28 px-6 max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <span className="red-line-left" />
-            <span className="text-[10px] tracking-[0.3em] uppercase text-crimson font-medium">Welcome to Cecilia</span>
-            <h2 className="font-display text-5xl md:text-6xl font-light text-navy mt-4 mb-6 leading-tight">
-              Education as an <span className="italic text-crimson">Investment</span>
-            </h2>
-            <p className="text-slate text-base leading-relaxed mb-6">
-              Cecilia Learning Academy was founded on a singular conviction: that exceptional education should be experiential, personal, and transformative. For over two decades, we have been the institution of choice for families who understand that a child&apos;s schooling years are not a rehearsal — they are the foundation of everything.
-            </p>
-            <p className="text-slate text-base leading-relaxed mb-10">
-              Our approach blends the best of British educational methodology with the spirit and heritage of Nigeria, producing graduates who are both globally competitive and deeply rooted.
-            </p>
-            <div className="flex gap-4 flex-wrap">
-              <Link href="/about" className="btn-gold"><span>Our Story</span></Link>
-              <Link href="/contact" className="btn-outline-navy">Book a Tour</Link>
-            </div>
-          </div>
-
-          {/* Visual block */}
-          <div className="relative">
-            <div className="aspect-[4/5] bg-gradient-to-br from-navy to-navy-mid relative overflow-hidden">
-              <div className="absolute inset-0 opacity-10">
-                <svg width="100%" height="100%"><defs><pattern id="weave" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M0 20 L20 0 L40 20 L20 40 Z" fill="none" stroke="#FFFFFF" strokeWidth="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#weave)" /></svg>
+      {/* About */}
+      <Section className="bg-white">
+        <Container>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-0.5 w-8 bg-crimson" />
+                <span className="text-crimson text-[11px] font-bold uppercase tracking-[0.22em]">About CLA</span>
               </div>
-              {/* Red accent corner */}
-              <div className="absolute top-0 left-0 w-16 h-16 bg-crimson" />
-              <div className="absolute bottom-0 right-0 w-16 h-16 bg-crimson" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-10">
-                <div className="font-display text-white/10 text-8xl italic mb-4">&ldquo;</div>
-                <p className="font-display text-white text-2xl font-light italic leading-relaxed">To educate a child is to invest in the soul of a nation.</p>
-                <div className="h-0.5 w-12 bg-crimson my-6" />
-                <span className="text-white/50 text-[10px] tracking-[0.25em] uppercase">The Cecilia Principle</span>
-              </div>
-            </div>
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 border-2 border-navy/20" />
-            <div className="absolute -top-6 -right-6 w-32 h-32 border-2 border-crimson/20" />
-          </div>
-        </div>
-      </section>
-
-      {/* Schools section */}
-      <section className="py-24 bg-ivory-dark">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="gold-line" />
-            <span className="text-[10px] tracking-[0.3em] uppercase text-crimson font-medium block mb-4">From Cradle to University</span>
-            <h2 className="font-display text-5xl font-light text-navy">Our <span className="italic text-crimson">Four Schools</span></h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {schools.map((school) => (
-              <div key={school.name} className={`school-card bg-gradient-to-b ${school.color} border ${school.border} p-8 bg-white`}>
-                <div className="text-4xl mb-6">{school.icon}</div>
-                <div className={`text-[9px] tracking-[0.25em] uppercase font-medium mb-2 ${school.accent}`}>Ages {school.age}</div>
-                <h3 className="font-display text-3xl font-light text-navy mb-4">{school.name}</h3>
-                <p className="text-slate text-sm leading-relaxed mb-6">{school.desc}</p>
-                <Link href="/schools" className={`text-[10px] tracking-[0.25em] uppercase font-medium flex items-center gap-2 hover:gap-4 transition-all duration-300 ${school.accent}`}>
-                  Learn More <span>→</span>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-navy-dark mb-5 leading-tight">
+                {settings.home_about_title || "A Legacy of Excellence in Port Harcourt"}
+              </h2>
+              <p className="text-slate leading-relaxed mb-4">
+                {settings.home_about_body || "Cecilia Learning Academy (CLA) has been a cornerstone of quality education in Rumuolumeni, Port Harcourt. We believe every child deserves an education that nurtures intellect, character, and potential."}
+              </p>
+              <p className="text-slate leading-relaxed mb-8">
+                {settings.home_about_body2 || "From our warm Crèche programme to our rigorous Secondary School, CLA provides a complete educational journey guided by our motto: \"Learning for Development.\""}
+              </p>
+              <ul className="space-y-3 mb-8">
+                {["WAEC & NECO accredited secondary school", "Experienced and qualified teaching staff", "Safe, inclusive, and stimulating environment", "Extracurricular activities & sports clubs"].map(item => (
+                  <li key={item} className="flex items-start gap-3 text-sm text-slate">
+                    <CheckCircle size={16} className="text-crimson shrink-0 mt-0.5" /> {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex gap-3 flex-wrap">
+                <Link href="/about" className="inline-flex items-center gap-2 bg-navy text-white font-semibold text-sm px-6 py-3 uppercase tracking-wider hover:bg-navy-dark transition-colors">
+                  Learn About Us
                 </Link>
+                <Link href="/admissions" className="inline-flex items-center gap-2 border-2 border-navy text-navy font-semibold text-sm px-6 py-3 uppercase tracking-wider hover:bg-navy hover:text-white transition-colors">
+                  Apply Now
+                </Link>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <img
+                  src="https://res.cloudinary.com/devdspz1m/image/upload/w_900,h_700,c_fill,g_auto,q_auto,f_auto/v1781695455/PHOTO-2026-05-11-20-58-36_zz746f.jpg"
+                  alt="CLA students in a creative learning activity"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-navy-dark/30" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-navy-dark/80 to-transparent">
+                  <p className="font-display text-white text-lg italic leading-relaxed">&ldquo;Learning for Development&rdquo;</p>
+                  <span className="text-white/50 text-xs uppercase tracking-[0.2em]">Cecilia Learning Academy</span>
+                </div>
+              </div>
+              <div className="absolute -bottom-4 -right-4 w-20 h-20 border-2 border-crimson/25" />
+              <div className="absolute -top-4 -left-4 w-20 h-20 border-2 border-navy/15" />
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Schools */}
+      <Section className="bg-ivory">
+        <Container>
+          <SectionHeader eyebrow="Our Programmes" title="Education at Every Stage"
+            subtitle="From your child's first steps to their final exams, CLA offers a complete educational journey tailored to each stage of development." />
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {DIVISIONS.map(div => (
+              <Link key={div.slug} href={`/schools/${div.slug}`}
+                className="bg-white border border-ivory-dark hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
+                <div className="p-6">
+                  <div className="text-4xl mb-4">{div.icon}</div>
+                  <div className="text-xs text-crimson font-bold uppercase tracking-wider mb-1">Ages {div.ageRange}</div>
+                  <h2 className="font-display text-xl font-bold text-navy-dark mb-2 group-hover:text-crimson transition-colors">{div.label}</h2>
+                  <p className="text-sm text-slate leading-relaxed mb-4 line-clamp-3">
+                    {div.slug === "creche" ? (settings.school_creche_desc || "A warm, safe, and stimulating environment for our youngest learners.") :
+                     div.slug === "nursery" ? (settings.school_nursery_desc || "Play-based learning that builds foundations in literacy, numeracy, and social skills.") :
+                     div.slug === "primary" ? (settings.school_primary_desc || "A rigorous and joyful curriculum developing critical thinkers and confident learners.") :
+                     (settings.school_secondary_desc || "University-preparatory education with WAEC/NECO pathways and leadership development.")}
+                  </p>
+                  <div className="text-xs font-bold text-crimson flex items-center gap-1 group-hover:gap-2 transition-all">
+                    Learn More <ArrowRight size={12} />
+                  </div>
+                </div>
+                <div className="h-[3px]" style={{ background: div.color }} />
+              </Link>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* Why CLA */}
+      <Section className="bg-navy-dark relative overflow-hidden">
+        <Container className="relative">
+          <SectionHeader eyebrow="Why Choose Us" title="The CLA Difference" light
+            subtitle="We go beyond academics to cultivate well-rounded individuals ready for the challenges of tomorrow." />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              { icon: GraduationCap, t: "Academic Excellence",  d: "Rigorous curriculum aligned with Nigerian standards, with a proven track record of outstanding results." },
+              { icon: Heart,         t: "Holistic Development", d: "Sports, arts, clubs and character-building activities that complement the academic programme." },
+              { icon: Shield,        t: "Safe Environment",     d: "A secure, disciplined campus where every child feels valued, respected, and protected." },
+              { icon: Users,         t: "Experienced Educators",d: "Qualified, passionate teachers committed to unlocking the potential in every student." },
+              { icon: Star,          t: "Strong Values",        d: "We instil integrity, discipline, respect, and faith — values that guide students throughout life." },
+              { icon: BookOpen,      t: "Modern Learning",      d: "Contemporary teaching methods that prepare students for the demands of a digital, global world." },
+            ].map(({ icon: Icon, t, d }) => (
+              <div key={t} className="group p-6 border border-white/10 hover:border-crimson/50 transition-colors">
+                <div className="w-11 h-11 bg-crimson/20 flex items-center justify-center mb-4 group-hover:bg-crimson transition-colors">
+                  <Icon size={20} className="text-crimson group-hover:text-white transition-colors" />
+                </div>
+                <h3 className="font-display text-lg font-bold text-white mb-2">{t}</h3>
+                <p className="text-white/45 text-sm leading-relaxed">{d}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* Values */}
-      <section className="py-28 px-6 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <span className="gold-line" />
-          <span className="text-[10px] tracking-[0.3em] uppercase text-crimson font-medium block mb-4">The Pillars of a Cecilia Education</span>
-          <h2 className="font-display text-5xl font-light text-navy">What We <span className="italic text-crimson">Stand For</span></h2>
+      {/* CTA */}
+      <div className="bg-crimson py-20 text-center px-6">
+        <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
+          {settings.home_cta_title || "Ready to Join the CLA Family?"}
+        </h2>
+        <p className="text-white/75 text-lg mb-8 max-w-xl mx-auto">
+          {settings.home_cta_subtitle || "Enrolment is open. Secure your child's place in one of Port Harcourt's leading private schools today."}
+        </p>
+        <div className="flex gap-4 justify-center flex-wrap">
+          <Link href="/admissions" className="bg-white text-crimson font-bold px-8 py-4 text-sm uppercase tracking-wider hover:bg-ivory transition-colors inline-flex items-center gap-2">
+            Apply for Admission <ArrowRight size={15} />
+          </Link>
+          <Link href="/contact" className="border-2 border-white text-white font-bold px-8 py-4 text-sm uppercase tracking-wider hover:bg-white/10 transition-colors">
+            Contact Us
+          </Link>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {values.map((v) => (
-            <div key={v.title} className="group">
-              <div className="w-14 h-14 border-2 border-navy/20 flex items-center justify-center mb-6 group-hover:border-crimson group-hover:bg-crimson/5 transition-all duration-300">
-                <v.icon size={22} className="text-navy/50 group-hover:text-crimson transition-colors duration-300" />
+      </div>
+
+      {/* Location */}
+      <Section className="bg-white">
+        <Container>
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-0.5 w-8 bg-crimson" />
+                <span className="text-crimson text-[11px] font-bold uppercase tracking-[0.22em]">Find Us</span>
               </div>
-              <h4 className="font-display text-2xl font-light text-navy mb-3">{v.title}</h4>
-              <p className="text-slate text-sm leading-relaxed">{v.desc}</p>
+              <h2 className="font-display text-3xl font-bold text-navy-dark mb-6">Visit Our Campus</h2>
+              <div className="space-y-5 mb-8">
+                {[
+                  { icon: MapPin, label: "Address", value: SCHOOL.address },
+                  { icon: Phone, label: "Phone", value: SCHOOL.phone, href: `tel:${SCHOOL.phone}` },
+                  { icon: Mail, label: "Email", value: SCHOOL.email, href: `mailto:${SCHOOL.email}` },
+                ].map(({ icon: Icon, label, value, href }) => (
+                  <div key={label} className="flex gap-4">
+                    <div className="w-10 h-10 bg-crimson/10 flex items-center justify-center shrink-0">
+                      <Icon size={17} className="text-crimson" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-bold text-slate uppercase tracking-wider mb-0.5">{label}</div>
+                      {href ? <a href={href} className="text-sm text-navy hover:text-crimson transition-colors">{value}</a>
+                             : <p className="text-sm text-slate leading-relaxed">{value}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <a href={SCHOOL.googleMapsUrl} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-crimson text-white font-bold text-sm px-6 py-3 uppercase tracking-wider hover:bg-crimson-dark transition-colors">
+                Get Directions on Google Maps <ArrowRight size={14} />
+              </a>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA Banner — navy with crimson accents */}
-      <section className="relative bg-navy py-24 overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-crimson" />
-        <div className="absolute inset-0 opacity-[0.04]">
-          <svg width="100%" height="100%"><defs><pattern id="hexagon" width="60" height="52" patternUnits="userSpaceOnUse"><polygon points="30,1 59,15 59,37 30,51 1,37 1,15" fill="none" stroke="#FFFFFF" strokeWidth="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#hexagon)" /></svg>
-        </div>
-        <div className="relative max-w-3xl mx-auto text-center px-6">
-          <BookOpen className="text-crimson mx-auto mb-6" size={32} />
-          <h2 className="font-display text-5xl md:text-6xl text-white font-light mb-6 leading-tight">
-            Begin the Admissions <span className="italic text-crimson">Journey</span>
-          </h2>
-          <p className="text-white/50 text-base leading-relaxed mb-10">
-            Spaces at Cecilia Learning Academy are limited by design. We maintain small class sizes to ensure every child receives the individual attention they deserve.
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link href="/contact" className="btn-gold"><span>Apply for Admission</span></Link>
-            <Link href="/schools" className="btn-outline">View All Programmes</Link>
+            <div className="bg-navy/5 border border-ivory-dark h-80 flex items-center justify-center">
+              <div className="text-center p-8">
+                <MapPin size={36} className="text-crimson mx-auto mb-3" />
+                <p className="font-display text-lg font-bold text-navy">Cecilia Learning Academy</p>
+                <p className="text-sm text-slate mt-1">4 Miller Avenue, Opposite Cecilia Bus Stop</p>
+                <p className="text-sm text-slate">Rumuolumeni, Port Harcourt</p>
+                <a href={SCHOOL.googleMapsUrl} target="_blank" rel="noopener noreferrer"
+                  className="inline-block mt-4 bg-crimson text-white text-xs font-bold px-5 py-2 uppercase tracking-wider hover:bg-crimson-dark transition-colors">
+                  Open in Google Maps
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </Container>
+      </Section>
+    </>
   );
 }
