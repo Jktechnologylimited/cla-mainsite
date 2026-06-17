@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description: "Learn about Cecilia Learning Academy — our mission, vision, values and story of quality education in Port Harcourt.",
 };
 
+
 async function getSettings() {
   try {
     const r = await fetch(`${ADMIN_URL}/api/public/settings`, { next: { revalidate: 300 } });
